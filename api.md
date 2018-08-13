@@ -152,9 +152,9 @@ Https://api.zoe.com/
 ```
 		X-RateLimit-Limit :100 最大访问次数
 		X-RateLimit-Remaining :93 剩余的访问次数
-		X-RateLimit-Reset :1513784506 到该时间点，访问次数会重置为 X-RateLimit-Limit
+		X-RateLimit-Reset :1513784506 到该时间点，访问次数会重置为 X-RateLimit-Limit
 ```
-超过限流次数后，需要返回 **429 Too Many Requests** 错误。
+超过限流次数后，需要返回 **429 Too Many Requests** 错误。
 
 **10、编写文档**
 
@@ -164,9 +164,18 @@ Https://api.zoe.com/
 	•	对于某一类接口，需要有尽量详细的文字说明，比如针对一些特定场景，接口应该如何调用。
 
 
-## 如何在不支持 `DELETE` 请求的浏览器上兼容 `DELETE` 请求
-
+* 如何在不支持 `DELETE` 请求的浏览器上兼容 `DELETE` 请求
 * 常见 API 的 `APP_ID` `APP_SECRET` 主要作用是什么？阐述下流程 
+
+- 客户端（app/浏览器）将用户导向第三方认证服务器
+- 用户在第三方认证服务器，选择是否给予客户端授权
+- 用户同意授权后，认证服务器将用户导向客户端事先指定的重定向URI，同时附上一个授权码。
+- 客户端将授权码发送至服务器，服务器通过授权码以及APP_SECRET向第三方服务器申请access_token
+- 服务器通过access_token，向第三方服务器申请用户数据，完成登陆流程，
+
+	1.	APP_SECRET 存储在客户端，客户端获取授权码之后，直接通过授权码和 APP_SECRET 去第三方换取 access_token。
+	2.	APP_SECRET 存储在服务端，客户端获取授权码之后，将授权码发送给服务器，服务器通过授权码和 APP_SECRET 去第三方换取 access_token。（推荐）
+
 * API 请求如何保证数据不被篡改？
 * JSON 和 JSONP 的区别
 * 数据加密和验签的区别
@@ -176,3 +185,5 @@ Https://api.zoe.com/
 * OAuth 2 主要用在哪些场景下
 * JWT
 * PHP 中 `json_encode(['key'=>123]);` 与 `return json_encode([]);` 区别，会产生什么问题？如何解决
+
+
