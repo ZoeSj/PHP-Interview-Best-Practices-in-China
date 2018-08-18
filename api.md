@@ -6,7 +6,7 @@
 有哪些RESTful风格的接口？
 [Github API](https://developer.github.com/v3/)
 
-** why choose RESTful ？ **
+**why choose RESTful ？**
 
 ### 接口基本原则：
 1、安全可靠，高效易扩展
