@@ -6,7 +6,7 @@
 有哪些RESTful风格的接口？
 [Github API](https://developer.github.com/v3/)
 
-** why choose RESTful ？ **
+**why choose RESTful ？**
 
 ### 接口基本原则：
 1、安全可靠，高效易扩展
@@ -14,18 +14,18 @@
 3、API风格统一，调用规则，传入参数和返回数据有统一的标准
 
 ### RESTful的设计理念基于HTTP协议，设计原则：
-** 1、HTTPS **
+**1、HTTPS **
 HTTPS为接口的安全提供了保障，可以有效防止通信被窃听和篡改，可以通过
 [cerbot](https://certbot.eff.org/)等工具。
 Attention：非HTTPS的API调用，不要重定向到HTTPS。而要直接返回调用错误以禁止不安全的调用。
 
-** 2、域名 **
+**2、域名 **
 应当尽可能的将API和主域名区分开，可以使用专用的域名：
 `https://api.zoe.com`
 Or 
 `https://www.zoe.com/api`
 
-** 3、版本控制 **
+**3、版本控制 **
 第一种：将版本号直接加入到URL中
 ```
 https://api.zoe.com/v1
@@ -40,7 +40,7 @@ Https://api.zoe.com/
 ```
 ![postman test](http://ol1lfoh6e.bkt.clouddn.com/594affbbd269aee9ac07f6ecd51f50ba.png)
 
-** 4、用URL定位资源 **
+**4、用URL定位资源 **
 在REST福利的架构中，所有的一切都表示资源，每个URL都代表一个资源（名词），而且大部分情况下资源是名词的复数，尽量不要在URL中出现动词。
 Such as：(冒号开始的代表变量)
 ```
@@ -71,10 +71,12 @@ POST https://api.larabbs.com/topics/1/comments
 DELETE https://api.larabbs.com/topics/1/comments/100
 ```
 
-** 5、用http动词描述操作 **
+**5、用http动词描述操作 **
+
 http设计了很多动词来表示不同的操作，RESTful吧这些利用的很好，来表明如何操作资源。
 幂等性：指一次和多次请求某一个资源应该具有同样的副作用，也就是一次访问和多次访问，对这个资源带来的变化是相同的。
 常见的动词及幂等性：
+
 |动词|描述|是否幂等性|
 |:----    |:---|:----- |
 |GET|获取资源，单个或多个|是|
@@ -87,7 +89,7 @@ http设计了很多动词来表示不同的操作，RESTful吧这些利用的很
 
 Attention：GET请求对于资源来说是安全的，不允许GET请求改变（更新或创建）资源，但是实际中，为了方便统计类的数据，会有一些例外，例如帖子详情，记录访问次数，每调用一次，访问次数加一。
 
-** 6、资源过滤 **
+**6、资源过滤 **
 需要提供合理的参数供客户端过滤资源，such as：
 ```
 ?state=closed:不同的状态
@@ -95,7 +97,7 @@ Attention：GET请求对于资源来说是安全的，不允许GET请求改变�
 ?sortby=name&order=asc:指定返回结果按照哪个属性排序，以及排序顺序。
 ```
 
-** 7、正确使用状态码 **
+**7、正确使用状态码 **
 ```
 	200 OK - 对成功的 GET、PUT、PATCH 或 DELETE 操作进行响应。也可以被用在不创建新资源的 POST 操作上
 	201 Created - 对创建新资源的 POST 操作进行响应。应该带着指向新资源地址的 Location 头
@@ -114,7 +116,7 @@ Attention：GET请求对于资源来说是安全的，不允许GET请求改变�
 
 ```
 
-** 8、数据响应格式 **
+**8、数据响应格式 **
 默认使用json作为数据响应格式，如果客户端需求使用其他的响应格式，例如xml，需要在accept头中指定需要的格式。
 ```
 Https://api.zoe.com/
@@ -147,7 +149,7 @@ Https://api.zoe.com/
 }
 ```
 
-** 9、调用频率限制 **
+**9、调用频率限制 **
 为了防止服务器被攻击，减少服务器压力。需要对接口进行合适的限流控制，在响应头信息中加入合适的信息，告知客户端当前的限流情况：
 ```
 		X-RateLimit-Limit :100 最大访问次数
@@ -156,7 +158,7 @@ Https://api.zoe.com/
 ```
 超过限流次数后，需要返回 **429 Too Many Requests** 错误。
 
-** 10、编写文档 **
+**10、编写文档 **
 
 为了方便用户使用，我们需要提供清晰的文档，尽可能包括以下几点
 	•	包括每个接口的请求参数，每个参数的类型限制，是否必填，可选的值等。
@@ -184,7 +186,7 @@ Https://api.zoe.com/
 谈到ajax会面临两个问题，一个是：AJAX以何种格式来交换数据？另一个：跨域的需求如何解决？
 比较推崇的方案：用json来传数据，靠jsonp来实现跨域。
 
-** json示例：**
+**json示例：**
 ```
 // 描述一个人
 
@@ -260,7 +262,8 @@ var conference = {
 var henryIsAnEngineer = conference.Members[2].Engineer;
 ```
 
-** JSONP **
+**JSONP **
+
 >Ajax直接请求普通文件存在跨域无权限访问的问题，无论是静态页面还是动态页面，web服务，WCF（？），但是在web页面上调用js文件时不受到跨域的影响（凡是yongyousrc属性的都有跨域的神奇能力），所以可以通过在远程服务器上设法把数据装进js格式的文件里，供客户端调用和进一步处理，而处理这些数据的格式可以是json，而且json还被原生js支持，很完美了。
 
 方案如下：
